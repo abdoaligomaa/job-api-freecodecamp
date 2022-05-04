@@ -12,8 +12,8 @@ const port=process.env.MONGOURL||3000
 const DbUrl='mongodb://127.0.0.1:27017/job_api'
 
 app.use(express.json())
-// app.use('api/v1/auth',userRouter)
-// app.use('api/v1/job',jobRouter)
+app.use('api/v1/auth',authRouter)
+app.use('api/v1/job',jobRouter)
 
 app.get('/',(req,res)=>{
     throw Error("page not found")
