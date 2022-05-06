@@ -1,7 +1,7 @@
 
 
 const getAllJobs=(req,res,next)=>{
-    res.send('get all jobs ')
+    res.send('get all jobs and some other jobs')
 }
 const getJob=(req,res,next)=>{
     res.send('get job by id ')
