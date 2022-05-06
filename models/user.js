@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+const bcrypt=require('bcryptjs')
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -11,7 +12,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Please provide email'],
-    unique:true,
+    unique:[true,'email must be unique'],
     
   },
   password: {
@@ -19,6 +20,11 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please provide password'],
     minlength: 6,
   },
+})
+
+UserSchema.pre('save',async function(next){
+  this.password=await bcrypt.hash(this.password,10)
+  next()
 })
 
 
