@@ -7,12 +7,14 @@ function isAuth(req,res,next){
            return next('Error in Auth')
     }
     token=token.split(' ')[1]
-    console.log(token)
-    // const decoded=jwt.verify(token,'jwt secret')
-    const decoded=jwt.verify('abdcededed','jwt secret')
-    req.user=decoded
-    console.log(decoded)
-    next()
+    try {
+        const decoded=jwt.verify(token,'jwt secret')
+        console.log(decoded)
+        req.user={userId:decoded.id,name:decoded.name}
+        next()
+    } catch (error) {
+        next(error)
+    }
 }
 
 module.exports=isAuth

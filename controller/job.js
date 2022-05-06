@@ -1,10 +1,12 @@
 
 
 const getAllJobs=(req,res,next)=>{
-    res.send('get all jobs and some other jobs')
+    console.log(req.user)
+    res.send(req.user)
+
 }
 const getJob=(req,res,next)=>{
-    res.send('get job by id ')
+    res.send(req.user)
 }
 const creatJob=(req,res,next)=>{
     res.send('creat')
