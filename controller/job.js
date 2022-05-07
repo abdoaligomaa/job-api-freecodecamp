@@ -1,8 +1,13 @@
 const mongoose=require('mongoose')
+const job = require('../models/job')
 const Job=require('../models/job')
-const getAllJobs=(req,res,next)=>{
-    console.log(req.user)
-    res.send(req.user)
+const getAllJobs=async(req,res,next)=>{
+    const userId=req.user.userId
+    const jobs=await Job.find({createdBy:userId})
+    if(!jobs){
+        return next("there are no user")
+    }
+    res.json({count:jobs.length,jobs})
 
 }
 const getJob=async(req,res,next)=>{
