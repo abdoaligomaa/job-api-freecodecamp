@@ -4,6 +4,7 @@ const jobRouter=require('./router/job')
 const authRouter=require('./router/auth')
 const errorHandeler=require('./middleware/errorHandeler')
 const notfoundPage=require('./middleware/notfound')
+const auth=require('./middleware/auth')
 
 const express=require('express')
 const app=express()
@@ -13,7 +14,7 @@ const DbUrl='mongodb://127.0.0.1:27017/job_api'
 
 app.use(express.json())
 app.use('/api/v1/auth',authRouter)
-app.use('/api/v1/job',jobRouter)
+app.use('/api/v1/job',auth,jobRouter)
 app.use(notfoundPage)
 app.use(errorHandeler)
 
