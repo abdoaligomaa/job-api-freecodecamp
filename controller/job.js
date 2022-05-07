@@ -1,4 +1,4 @@
-
+const mongoose=require('mongoose')
 const Job=require('../models/job')
 const getAllJobs=(req,res,next)=>{
     console.log(req.user)
@@ -6,13 +6,17 @@ const getAllJobs=(req,res,next)=>{
 
 }
 const getJob=async(req,res,next)=>{
-    var jobId = mongoose.Types.ObjectId(req.params.id)
-    // const jobId=req.params.id 
-    const job=await Job.findById(jobId)
-    if(!job){
-        return next("there are no job in this id")
+    // var jobId = mongoose.Types.ObjectId(req.params.id)
+    const jobId=req.params.id 
+    try {
+        const job=await Job.findById(jobId)
+        if(!job){
+            return next("there are no job in this id")
+        }
+        res.send(job)
+    } catch (error) {
+        res.json({error})
     }
-    res.send(job)
     
 }
 const creatJob=async(req,res,next)=>{
@@ -20,11 +24,39 @@ const creatJob=async(req,res,next)=>{
     const job = await Job.create(req.body)
     res.send(job)
 }
-const updateJob=(req,res,next)=>{
-    res.send('update job ')
+const updateJob=async(req,res,next)=>{
+    const jobId=req.params.id 
+    // var jobId = mongoose.Types.ObjectId(req.params.id)
+    const {body:{company,position}}=req
+    if(company==" "&&position==" "){
+        return next("you should enter The update field")
+    }
+    try {
+        const job=await Job.findByIdAndUpdate(jobId,req.body,{new: true, runValidators: true})
+        if(!job){
+            return next("there are no job in this id")
+        }
+        res.send(job)
+    } catch (error) {
+        res.json({error})
+    }
 }
-const deleteJob=(req,res,next)=>{
-    res.send('delete job')
+const deleteJob=async(req,res,next)=>{
+    const jobId=req.params.id 
+    // var jobId = mongoose.Types.ObjectId(req.params.id)
+    const {body:{company,position}}=req
+    if(company==" "&&position==" "){
+        return next("you should enter The update field")
+    }
+    try {
+        const job=await Job.findByIdAndRemove(jobId)
+        if(!job){
+            return next("there are no job in this id")
+        }
+        res.send(job)
+    } catch (error) {
+        res.json({error})
+    }
 }
 
 module.exports={
