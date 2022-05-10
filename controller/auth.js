@@ -1,9 +1,12 @@
 const User=require('../models/user')
 const jwt=require('jsonwebtoken')
+// const {sendEmail}=require('../email/nodemailer')
 
 const signUP=async(req,res,next)=>{
     try{
         const user =await User(req.body)
+        console.log(req.body.email)
+        // sendEmail()
         const token=user.generateToken()
         await user.save()
         res.json({

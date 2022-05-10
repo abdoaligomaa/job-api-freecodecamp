@@ -1,6 +1,6 @@
 const nodeMailer=require('nodemailer')
 
-const trnsporter=nodeMailer.createTransport({
+const transporter=nodeMailer.createTransport({
     service:'gmail',
     auth:{
         email:"abdulrahmanaligomaa107@gmail.com",
@@ -11,14 +11,14 @@ const trnsporter=nodeMailer.createTransport({
 
 
 
-const sendEmail=(email)=>{
+
     const mailOption ={
-    from:"abdoaligomaa107@gmail.com",
-    to:email,
+    from:"abdulrahmanaligomaa107@gmail.com",
+    to:"abdulrahmanaligomaa107@gmail.com",
     subject:"test Email",
     text:"this is a the first test Email i need to test my emial"
 }
-transporter.sendMail(mailOption, function(err, data) {
+    transporter.sendMail(mailOption, function(err, data) {
       if (err) {
         console.log("Error " + err);
       } else {
@@ -26,7 +26,7 @@ transporter.sendMail(mailOption, function(err, data) {
       }
     });
 
-}
+
 module.exports={
     sendEmail
 }
