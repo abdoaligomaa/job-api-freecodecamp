@@ -1,9 +1,11 @@
-const express=require('express')
-const Router=express.Router()
+require("express-async-errors");
 
-const {signUP,logIN}=require('../controller/auth')
+const express = require("express");
+const Router = express.Router();
 
-Router.post("/signUP",signUP)
-Router.post("/logIn",logIN)
+const { signUP, logIN } = require("../controller/auth");
 
-module.exports=Router
+Router.post("/signUP", signUP);
+Router.post("/logIn", logIN);
+
+module.exports = Router;

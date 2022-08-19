@@ -3,7 +3,7 @@ function isAuth(req,res,next){
     
     let token=req.headers.authorization
     if(!token){
-           return next('Error in Auth')
+           throw new Error('Error in Auth')
     }
     token=token.split(' ')[1]
     try {
@@ -11,7 +11,7 @@ function isAuth(req,res,next){
         req.user={userId:decoded.id,name:decoded.name}
         next()
     } catch (error) {
-        next(error)
+        throw new Error('Error in Token Validation')
     }
 }
 

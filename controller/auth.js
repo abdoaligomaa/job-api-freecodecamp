@@ -1,37 +1,46 @@
 const User=require('../models/user')
 const jwt=require('jsonwebtoken')
+// const { create } = require('../models/user')
+require('express-async-errors')
 // const {sendEmail}=require('../email/nodemailer')
 
 const signUP=async(req,res,next)=>{
-    try{
-        const user =await User(req.body)
-        console.log(req.body.email)
+    // validate req.body
+    // create new user
+    // create Token
+    if(req.body.name==" "||req.body.email==" "||req.body.password==" "){
+        throw new Error('Please provide all name , email and password')
+    }
+    try {
+        const user = await User.create(req.body)
+        
+    } catch (error) {
+        throw new Error("Error in validation results");
+        
+    }
+        
         // sendEmail()
         const token=user.generateToken()
-        await user.save()
         res.json({
-            user:user,
+            user,
             token
         })
-    }catch(e){
-        next(e)
-    }
 }
 const logIN=async(req,res,next)=>{
 
         
         const {email,password}=req.body
         if(!email||!password){
-           return next('please provide both email and password')
+           throw new Error('please provide both email and password')
         }
         const user=await User.findOne({email:email})
         if(!user){
-           return next('please enter correct email')
+           throw new Error('please enter correct email')
         }
     
         const isPassCorrect=await user.checkPassword(password)
         if(!isPassCorrect){
-           return next('please Enter Correct Password')
+           throw new Error('please Enter Correct Password')
         }
         const token=user.generateToken()
     
@@ -39,7 +48,6 @@ const logIN=async(req,res,next)=>{
                 user:user,
                 token
             })
-
 
 }
 module.exports={
