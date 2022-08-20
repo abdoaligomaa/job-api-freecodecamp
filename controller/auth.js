@@ -3,21 +3,25 @@ const jwt=require('jsonwebtoken')
 // const { create } = require('../models/user')
 require('express-async-errors')
 // const {sendEmail}=require('../email/nodemailer')
+const CustomError=require('../error/customError')
 
 const signUP=async(req,res,next)=>{
     // validate req.body
     // create new user
     // create Token
-    if(req.body.name==" "||req.body.email==" "||req.body.password==" "){
-        throw new Error('Please provide all name , email and password')
+    const {name,email,password}=req.body
+    if(!name||!email||!password){
+        throw  new CustomError('Please provide all name , email and password',404)
     }
-    try {
-        const user = await User.create(req.body)
+        const user = await User.create(req.body);
+
+    // try {
+    //     const user = await User.create(req.body)
         
-    } catch (error) {
-        throw new Error("Error in validation results");
+    // } catch (error) {
+    //     throw new CustomError("Error in validation results",404);
         
-    }
+    // }
         
         // sendEmail()
         const token=user.generateToken()
@@ -31,16 +35,16 @@ const logIN=async(req,res,next)=>{
         
         const {email,password}=req.body
         if(!email||!password){
-           throw new Error('please provide both email and password')
+           throw new CustomError('please provide both email and password',404)
         }
         const user=await User.findOne({email:email})
         if(!user){
-           throw new Error('please enter correct email')
+           throw new CustomError('please enter correct email',404)
         }
     
         const isPassCorrect=await user.checkPassword(password)
         if(!isPassCorrect){
-           throw new Error('please Enter Correct Password')
+           throw new CustomError('please Enter Correct Password',404)
         }
         const token=user.generateToken()
     
