@@ -14,15 +14,6 @@ const signUP=async(req,res,next)=>{
         throw  new CustomError('Please provide all name , email and password',404)
     }
         const user = await User.create(req.body);
-
-    // try {
-    //     const user = await User.create(req.body)
-        
-    // } catch (error) {
-    //     throw new CustomError("Error in validation results",404);
-        
-    // }
-        
         // sendEmail()
         const token=user.generateToken()
         res.json({
