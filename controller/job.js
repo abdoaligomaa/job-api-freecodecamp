@@ -63,43 +63,48 @@ const creatJob = async (req, res, next) => {
 const updateJob = async (req, res, next) => {
     const jobId = req.params.id
     // var jobId = mongoose.Types.ObjectId(req.params.id)
-    const {
-        body: { company, position },
+    let {
+        body: { company, position, status },
     } = req
-    if (company == ' ' && position == ' ') {
-        return next('you should enter The update field')
+    if (company == ' ' || position == ' ') {
+        throw new customError('you should Enter The update field', 404)
     }
+    if (status) {
+        const AvilableStatus = ['interview', 'declined', 'pending']
+        const CorrectStatus = AvilableStatus.includes(status)
+        if (!CorrectStatus) {
+            throw new customError(
+                'status for this position is not true you should choice from interview, declined,pending',
+                404
+            )
+        }
+        // i should get a better solution for this code
+    }else if(!status){
+        status = 'pending'
+    }
+    
+
     try {
         const job = await Job.findByIdAndUpdate(jobId, req.body, {
             new: true,
             runValidators: true,
         })
         if (!job) {
-            return next('there are no job in this id')
+            throw new customError('there are no job in this id', 404)
         }
-        res.send(job)
+        res.json(job)
     } catch (error) {
-        res.json({ error })
+        throw new customError('Error in updating the job', 404)
     }
 }
-const deleteJob = async (req, res, next) => {
+const deleteJob = async (req, res, ) => {
     const jobId = req.params.id
-    // var jobId = mongoose.Types.ObjectId(req.params.id)
-    const {
-        body: { company, position },
-    } = req
-    if (company == ' ' && position == ' ') {
-        return next('you should enter The update field')
-    }
     try {
-        const job = await Job.findByIdAndRemove(jobId)
-        if (!job) {
-            return next('there are no job in this id')
-        }
-        res.send(job)
+        const job=await Job.findByIdAndDelete(jobId)
     } catch (error) {
-        res.json({ error })
+        throw new customError('Error in deleting ,the id is not correct',404)
     }
+    res.json(job)
 }
 
 module.exports = {
