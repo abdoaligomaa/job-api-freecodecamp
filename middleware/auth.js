@@ -1,9 +1,10 @@
 const jwt=require('jsonwebtoken')
+const customError = require('../error/customError')
 function isAuth(req,res,next){
     
     let token=req.headers.authorization
-    if(!token){
-           throw new Error('Error in Auth')
+    if(!token||!token.startWith('Bearer ')){
+           throw new customError('You should Provide The JWT token',401)
     }
     token=token.split(' ')[1]
     try {
@@ -11,7 +12,7 @@ function isAuth(req,res,next){
         req.user={userId:decoded.id,name:decoded.name}
         next()
     } catch (error) {
-        throw new Error('Error in Token Validation')
+        throw new customError('Token Is not True , You should Enter the valid Token',401)
     }
 }
 
